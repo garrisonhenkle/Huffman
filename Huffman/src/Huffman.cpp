@@ -22,6 +22,7 @@ int main(int argc, char* argv[]) {
 	}
 
 	//create the Huffman object
+	//This creates the Huffman code and prints it to the screen
 	Huffman * h = new Huffman(filenameIn);
 
 	//delete all pointers
@@ -31,7 +32,17 @@ int main(int argc, char* argv[]) {
 Huffman::Huffman(string in) {
 	//set file location
 	filename = in;
+	cout << "pre read" << endl;
+	printOrder = read();
+	cout << "read worked" << endl;
 	build(read());
+	cout << "post build / read" << endl;
+	print();
+}
+
+Huffman::~Huffman(){
+	printOrder.clear();
+	delete printOrder;
 }
 
 pair<char, int> Huffman::processLine(string in) {
@@ -41,6 +52,9 @@ pair<char, int> Huffman::processLine(string in) {
 	string currChar;
 	string currCount;
 
+	//from index 0 to the space, add all characters to a string
+	//at the space, add all characters from (index of the space + 1) to the end of the line
+	//then break from both loops
 	for (int i = 0; i < in.length(); i++) {
 		if (in[i] != ' ') {
 			currChar += in[i];
@@ -56,6 +70,8 @@ pair<char, int> Huffman::processLine(string in) {
 		}
 	}
 
+	//Convert any characters in text form (i.e space instead of ' ')
+	//If it is not in text form, the first index of the string is the character
 	if (currChar == "space") {
 		outChar = ' ';
 	} else if (currChar == "newline") {
@@ -64,8 +80,10 @@ pair<char, int> Huffman::processLine(string in) {
 		outChar = currChar[0];
 	}
 
+	//convert the currCount string into the integer count of the character
 	outCount = stoi(currCount);
 
+	//return the character and its count in a pair
 	return make_pair(outChar, outCount);
 }
 
@@ -91,8 +109,13 @@ vector<Node *> Huffman::read() {
 	//for every available line, store the character and its count
 	while (getline(file, input)) {
 
+		//process the line into a character and a count (int) and store in a holder
 		processPair = processLine(input);
+
+		//create a new node using the process output and push it to the node vector
 		output.push_back(new Node(processPair.first, processPair.second));
+		cout << "Char: " << processPair.first << ", Count: "
+				<< processPair.second << endl;
 	}
 
 	return output;
