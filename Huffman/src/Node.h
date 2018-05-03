@@ -35,8 +35,8 @@ private:
 	char ch;
 	int value;
 
-	Node left;
-	Node right;
+	Node * left;
+	Node * right;
 
 	bool blank;
 

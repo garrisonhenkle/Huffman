@@ -11,6 +11,8 @@ Node::Node(char c, int i) {
 	ch = c;
 	value = i;
 	blank = false;
+	left = nullptr;
+	right = nullptr;
 }
 
 Node::Node(char c, int i, Node * lNode, Node * rNode){

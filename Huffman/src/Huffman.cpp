@@ -40,7 +40,7 @@ Huffman::Huffman(string in) {
 }
 
 Huffman::~Huffman(){
-	printOrder.clear();
+	printOrder->clear();
 	delete printOrder;
 }
 
@@ -86,7 +86,7 @@ pair<char, int> Huffman::processLine(string in) {
 	return make_pair(outChar, outCount);
 }
 
-vector<Node *> Huffman::read() {
+vector<Node *> * Huffman::read() {
 
 	//input file stream
 	ifstream file;
@@ -94,7 +94,7 @@ vector<Node *> Huffman::read() {
 	string input;
 
 	//vector that holds the nodes for each input
-	vector<Node *> output;
+	vector<Node *> * output;
 	//temporary pair holder
 	pair<char, int> processPair;
 
@@ -112,7 +112,7 @@ vector<Node *> Huffman::read() {
 		processPair = processLine(input);
 
 		//create a new node using the process output and push it to the node vector
-		output.push_back(new Node(processPair.first, processPair.second));
+		output->push_back(new Node(processPair.first, processPair.second));
 		cout << "Char: " << processPair.first << ", Count: "
 				<< processPair.second << endl;
 	}
@@ -120,4 +120,8 @@ vector<Node *> Huffman::read() {
 	return output;
 }
 
-void build(vector<Node *>)
+void build(vector<Node *> input){
+	for(Node n: input){
+		cout << n.getChar() << " : " << n.getValue() << endl;
+	}
+}

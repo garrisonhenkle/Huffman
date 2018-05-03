@@ -1,0 +1,7 @@
+a 10
+e 15
+i 12
+s 3
+t 4
+space 13
+newline 1
