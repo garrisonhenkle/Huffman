@@ -10,7 +10,7 @@
 
 class Node {
 public:
-	Node(char, int) //Node(int value, char c)
+	Node(char, int); //Node(int value, char c)
 	Node(char, int, Node *, Node *);
 	Node(Node *, Node *);
 	virtual ~Node();
@@ -22,7 +22,10 @@ public:
 	int getValue();
 
 	void setLeft(Node *);
+	Node * getLeft();
+
 	void setRight(Node *);
+	Node * getRight();
 
 	bool isBlank();
 	void setBlank(bool);

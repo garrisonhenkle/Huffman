@@ -12,6 +12,7 @@
 
 #include <string>
 #include <vector>
+#include "Node.h"
 
 using namespace std;
 
@@ -20,8 +21,7 @@ public:
 	Tree();
 	virtual ~Tree();
 private:
-	int netValue;
-	char letter
+	Node * root;
 };
 
 #endif /* TREE_H_ */

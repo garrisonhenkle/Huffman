@@ -21,7 +21,60 @@ Node::Node(char c, int i, Node * lNode, Node * rNode){
 	right = rNode;
 }
 
-Node::~Node() {
-	// TODO Auto-generated destructor stub
+Node::Node(Node * lNode, Node * rNode){
+	ch = 'A';
+	value = -1;
+	blank = true;
+	left = lNode;
+	right = rNode;
 }
 
+Node::~Node() {
+	delete left;
+	delete right;
+}
+
+void Node::setChar(char in){
+	ch = in;
+}
+
+char Node::getChar(){
+	return ch;
+}
+
+
+void Node::setValue(int in){
+	value = in;
+}
+
+int Node::getValue(){
+	return value;
+}
+
+void Node::setLeft(Node * in){
+	left = in;
+}
+
+Node * Node::getLeft(){
+	return left;
+}
+
+void Node::setRight(Node * in){
+	right = in;
+}
+
+Node * Node::getRight(){
+	return right;
+}
+
+bool Node::isBlank(){
+	if(blank == true){
+		return true;
+	} else{
+		return false;
+	}
+}
+
+void Node::setBlank(bool in){
+	blank = in;
+}
