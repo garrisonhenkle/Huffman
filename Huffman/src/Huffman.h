@@ -18,20 +18,15 @@ using namespace std;
 
 class Huffman {
 public:
-	//constructors and deconstructors
 	Huffman(string);
 	~Huffman();
-
-	//methods
 
 	vector<Node *> read();
 	void build(vector<Node *>);
 	void print();
 private:
-	//methods
 	pair<char, int> processLine(string);
 
-	//objects
 	vector<Node *> printOrder;
 	string filename;
 };

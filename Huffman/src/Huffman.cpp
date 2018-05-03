@@ -32,11 +32,10 @@ int main(int argc, char* argv[]) {
 Huffman::Huffman(string in) {
 	//set file location
 	filename = in;
-	cout << "pre read" << endl;
 	printOrder = read();
 	cout << "read worked" << endl;
-	build(read());
-	cout << "post build / read" << endl;
+	build(printOrder);
+	cout << "build worked" << endl;
 	print();
 }
 
@@ -120,3 +119,5 @@ vector<Node *> Huffman::read() {
 
 	return output;
 }
+
+void build(vector<Node *>)
