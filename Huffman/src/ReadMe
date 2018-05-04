@@ -1,0 +1,35 @@
+Commands
+----------
+Compile: g++ -std=c++11 *.cpp -o Main
+Run: ./Main <path/to/file/filename>
+
+Examples
+----------
+Usage:
+    -   ./Main test.txt
+    -   ./Main fileWithCharsAndCounts.txt
+
+Files:
+    -   a 20
+        e 5
+        i 2
+        s 3
+        t 15
+
+    -   a 10
+        e 15
+        i 12
+        s 3
+        t 4
+        space 13
+        newline 1
+
+Issues or Limitations
+-------------------
+    -   most literal characters do not work (\t, \b, etc.)
+        ** Note: \n is the only exception **
+
+    -   space characters can only be parsed when written as "space"
+
+    -   Occasionally the tree will be built with either only left children or right children, leading to
+        some differences between the output and the ideal Huffman Code

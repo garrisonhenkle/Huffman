@@ -1,12 +1,14 @@
 /*
  * Huffman.cpp
  *
- *  Created on: May 3, 2018
- *      Author: garrison
+ *
+ *  Created on: May 1, 2018
+ *  	Author: Garrison Henkle
  */
 
 #include "Huffman.h"
 
+//see header file
 int main(int argc, char* argv[]) {
 
 	string filenameIn;
@@ -27,24 +29,29 @@ int main(int argc, char* argv[]) {
 
 	//delete all pointers
 	delete h;
-}
 
+	return 0;
+} //end main
+
+//see header file
 Huffman::Huffman(string in) {
 	//set file location
 	filename = in;
-	/*
-	printOrder = read();
-	vector<Node *> huffCode = build(printOrder);
-	print(huffCode);
-	*/
-	printOrder = read();
-	print(build(printOrder), printOrder);
-}
 
+	//read the file
+	printOrder = read();
+
+	//print the tree in the same order it was given
+	print(build(printOrder), getOrder(printOrder));
+} //end constructor
+
+//see header file
 Huffman::~Huffman() {
 	printOrder.clear();
-}
+	code.clear();
+} //end deconstructor
 
+//see header file
 pair<char, int> Huffman::processLine(string in) {
 	char outChar;
 	int outCount;
@@ -85,8 +92,9 @@ pair<char, int> Huffman::processLine(string in) {
 
 	//return the character and its count in a pair
 	return make_pair(outChar, outCount);
-}
+} //end method processLine
 
+//see header file
 vector<Node *> Huffman::read() {
 
 	//input file stream
@@ -117,8 +125,9 @@ vector<Node *> Huffman::read() {
 	}
 
 	return output;
-}
+} //end method read
 
+//see header file
 pair<int, int> Huffman::getSmallestIndexes(vector<Node *> input) {
 	//smallest value's index
 	int index1 = 0;
@@ -128,9 +137,11 @@ pair<int, int> Huffman::getSmallestIndexes(vector<Node *> input) {
 	//for every node in the vector, if the value of the current node is smaller than the current
 	//smallest value, set the second smallest value to the smallest value and set the smallest value to
 	//the current node
-
+	//if the current node is larger than the smallest but smaller than the second smallest, then replace
+	//index2 to the current value
 	for (int i = 2; i < input.size(); i++) {
 
+		//at the beginning of each loop, make sure that the smallest is always in index 1
 		if (input.at(index1)->getValue() > input.at(index2)->getValue()) {
 			int temp = index1;
 			index1 = index2;
@@ -146,8 +157,9 @@ pair<int, int> Huffman::getSmallestIndexes(vector<Node *> input) {
 	}
 
 	return make_pair(index1, index2);
-}
+} //end method getSmallestIndexes
 
+//see header file
 vector<Node *> Huffman::build(vector<Node *> in) {
 
 	//current working node list
@@ -161,10 +173,15 @@ vector<Node *> Huffman::build(vector<Node *> in) {
 		//find the indexes of the smallest two nodes
 		indexes = getSmallestIndexes(currTrees);
 
+		//n1 and n2 hold the smallest and second smallest nodes, respectively
 		Node * n1 = currTrees.at(indexes.first);
 		Node * n2 = currTrees.at(indexes.second);
+
+		//combine the two smallest nodes into one tree
 		Node * newRoot = new Node(n1, n2);
 
+		//always delete the one later in the vector so it doesn't change where the second
+		//deletion will occur
 		if (indexes.first > indexes.second) {
 			currTrees.erase(currTrees.begin() + indexes.first);
 			currTrees.erase(currTrees.begin() + indexes.second);
@@ -173,27 +190,74 @@ vector<Node *> Huffman::build(vector<Node *> in) {
 			currTrees.erase(currTrees.begin() + indexes.first);
 		}
 
+		//push the new tree to the vector
 		currTrees.push_back(newRoot);
 	}
 
 	return currTrees;
-}
+} //end method build
 
-vector<char> Huffman::getOrder(vector<Node *> in){
+//see header file
+vector<char> Huffman::getOrder(vector<Node *> in) {
 
 	vector<char> output;
 
-	for(int i=0;i<in.size();i++){
+	//for all the nodes in the vector, compile the characters in order
+	for (int i = 0; i < in.size(); i++) {
 		output.push_back(in.at(i)->getChar());
 	}
 
 	return output;
-}
+} //end method getOrder
 
-void Huffman::print(vector<Node *> treeIn, vector<Node *> orderIn) {
+//see header file
+void Huffman::print(vector<Node *> treeIn, vector<char> orderIn) {
 	vector<Node *> tree = treeIn;
-	vector<pair<char, int>> code;
 
+	string codeStr = "";
 
+	//root of the tree
+	Node * current = tree.at(0);
 
-}
+	//if there is a left child, recursively call on that child and add to the code string
+	if (current->getLeft() != nullptr) {
+		print(current->getLeft(), codeStr += "0");
+	}
+	//if there is a right child, recursively call on that child and add to the code string
+	if (current->getRight() != nullptr) {
+		print(current->getRight(), codeStr += "1");
+	}
+
+	//after the code vector has been filled, print all the values
+	for (int i = 0; i < code.size(); i++) {
+		cout << code.at(i).first << " " << code.at(i).second << endl;
+	}
+
+} //end method print
+
+//see header file
+void Huffman::print(Node * n, string codeString) {
+	//if there is a left child, recursively call on that child and add to the code string
+	if (n->getLeft() != nullptr) {
+		print(n->getLeft(), codeString += "0");
+	}
+	//if there is a right child, recursively call on that child and add to the code string
+	if (n->getRight() != nullptr) {
+		print(n->getRight(), codeString += "1");
+	}
+	//if there is no children and it is not blank, add it to the list of codes
+	//convert any strange characters to a readable form (i.e. space and nextline)
+	if (n->isBlank() == false && n->getLeft() == nullptr
+			&& n->getRight() == nullptr) {
+		string temp;
+		if (n->getChar() == ' ') {
+			temp = "space";
+		} else if (n->getChar() == '\n') {
+			temp = "newline";
+		} else {
+			temp = n->getChar();
+		}
+		//add the pair of the character and string to list of codes
+		code.push_back(make_pair(temp, codeString));
+	}
+} //end method print helper
