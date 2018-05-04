@@ -25,7 +25,7 @@ Node::Node(char c, int i, Node * lNode, Node * rNode){
 
 Node::Node(Node * lNode, Node * rNode){
 	ch = 'A';
-	value = -1;
+	value = lNode->getValue() + rNode->getValue();
 	blank = true;
 	left = lNode;
 	right = rNode;

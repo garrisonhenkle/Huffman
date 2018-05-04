@@ -21,13 +21,14 @@ public:
 	Huffman(string);
 	~Huffman();
 
-	vector<Node *> * read();
-	void build(vector<Node *> *);
-	void print();
+	vector<Node *> read();
+	vector<Node *> build(vector<Node *>);
+	void print(vector<Node *>);
 private:
 	pair<char, int> processLine(string);
+	pair<int, int> getSmallestIndexes(vector<Node *>);
 
-	vector<Node *> * printOrder;
+	vector<Node *> printOrder;
 	string filename;
 };
 

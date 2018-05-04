@@ -32,16 +32,16 @@ int main(int argc, char* argv[]) {
 Huffman::Huffman(string in) {
 	//set file location
 	filename = in;
+	/*
 	printOrder = read();
-	cout << "read worked" << endl;
-	build(printOrder);
-	cout << "build worked" << endl;
-	print();
+	vector<Node *> huffCode = build(printOrder);
+	print(huffCode);
+	*/
+	print(build(read()));
 }
 
-Huffman::~Huffman(){
-	printOrder->clear();
-	delete printOrder;
+Huffman::~Huffman() {
+	printOrder.clear();
 }
 
 pair<char, int> Huffman::processLine(string in) {
@@ -51,22 +51,22 @@ pair<char, int> Huffman::processLine(string in) {
 	string currChar;
 	string currCount;
 
-	//from index 0 to the space, add all characters to a string
-	//at the space, add all characters from (index of the space + 1) to the end of the line
-	//then break from both loops
-	for (int i = 0; i < in.length(); i++) {
-		if (in[i] != ' ') {
-			currChar += in[i];
-		} else {
-			for (int j = (i + 1); j < in.length(); j++) {
-				if (in[i] != '\n') {
-					currCount += in[i];
-				} else {
-					break;
-				}
-			}
+	int currIndex = 0;
+
+	while (currIndex < in.length()) {
+		if (in[currIndex] == ' ') {
 			break;
+		} else {
+			currChar += in[currIndex];
 		}
+		currIndex++;
+	}
+
+	currIndex++;
+
+	while (currIndex < in.length()) {
+		currCount += in[currIndex];
+		currIndex++;
 	}
 
 	//Convert any characters in text form (i.e space instead of ' ')
@@ -80,13 +80,13 @@ pair<char, int> Huffman::processLine(string in) {
 	}
 
 	//convert the currCount string into the integer count of the character
-	outCount = stoi(currCount);
+	outCount = atoi(currCount.c_str());
 
 	//return the character and its count in a pair
 	return make_pair(outChar, outCount);
 }
 
-vector<Node *> * Huffman::read() {
+vector<Node *> Huffman::read() {
 
 	//input file stream
 	ifstream file;
@@ -94,7 +94,7 @@ vector<Node *> * Huffman::read() {
 	string input;
 
 	//vector that holds the nodes for each input
-	vector<Node *> * output;
+	vector<Node *> output;
 	//temporary pair holder
 	pair<char, int> processPair;
 
@@ -112,16 +112,73 @@ vector<Node *> * Huffman::read() {
 		processPair = processLine(input);
 
 		//create a new node using the process output and push it to the node vector
-		output->push_back(new Node(processPair.first, processPair.second));
-		cout << "Char: " << processPair.first << ", Count: "
-				<< processPair.second << endl;
+		output.push_back(new Node(processPair.first, processPair.second));
 	}
 
 	return output;
 }
 
-void build(vector<Node *> input){
-	for(Node n: input){
-		cout << n.getChar() << " : " << n.getValue() << endl;
+pair<int, int> Huffman::getSmallestIndexes(vector<Node *> input) {
+	//smallest value's index
+	int index1 = 0;
+	//second smallest value's index
+	int index2 = 1;
+
+	//for every node in the vector, if the value of the current node is smaller than the current
+	//smallest value, set the second smallest value to the smallest value and set the smallest value to
+	//the current node
+
+	for (int i = 2; i < input.size(); i++) {
+
+		if (input.at(index1)->getValue() > input.at(index2)->getValue()) {
+			int temp = index1;
+			index1 = index2;
+			index2 = temp;
+		}
+
+		if (input.at(i)->getValue() <= input.at(index1)->getValue()) {
+			index2 = index1;
+			index1 = i;
+		} else if (input.at(i)->getValue() <= input.at(index2)->getValue()) {
+			index2 = i;
+		}
 	}
+
+	return make_pair(index1, index2);
+}
+
+vector<Node *> Huffman::build(vector<Node *> in) {
+
+	//current working node list
+	vector<Node *> currTrees = in;
+
+	//current working indexes
+	pair<int, int> indexes;
+
+	//build the tree
+	while (currTrees.size() != 1) {
+		//find the indexes of the smallest two nodes
+		indexes = getSmallestIndexes(currTrees);
+
+		Node * n1 = currTrees.at(indexes.first);
+		Node * n2 = currTrees.at(indexes.second);
+		Node * newRoot = new Node(n1, n2);
+
+		if (indexes.first > indexes.second) {
+			currTrees.erase(currTrees.begin() + indexes.first);
+			currTrees.erase(currTrees.begin() + indexes.second);
+		} else {
+			currTrees.erase(currTrees.begin() + indexes.second);
+			currTrees.erase(currTrees.begin() + indexes.first);
+		}
+
+		currTrees.push_back(newRoot);
+	}
+
+	return currTrees;
+}
+
+void Huffman::print(vector<Node *>) {
+	vector<Node *> tree =
+
 }
