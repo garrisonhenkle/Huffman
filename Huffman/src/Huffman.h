@@ -23,7 +23,7 @@ public:
 
 	vector<Node *> read();
 	vector<Node *> build(vector<Node *>);
-	void print(vector<Node *>);
+	void print(vector<Node *>, vector<Node *>);
 private:
 	pair<char, int> processLine(string);
 	pair<int, int> getSmallestIndexes(vector<Node *>);

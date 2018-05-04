@@ -37,7 +37,8 @@ Huffman::Huffman(string in) {
 	vector<Node *> huffCode = build(printOrder);
 	print(huffCode);
 	*/
-	print(build(read()));
+	printOrder = read();
+	print(build(printOrder), printOrder);
 }
 
 Huffman::~Huffman() {
@@ -178,7 +179,21 @@ vector<Node *> Huffman::build(vector<Node *> in) {
 	return currTrees;
 }
 
-void Huffman::print(vector<Node *>) {
-	vector<Node *> tree =
+vector<char> Huffman::getOrder(vector<Node *> in){
+
+	vector<char> output;
+
+	for(int i=0;i<in.size();i++){
+		output.push_back(in.at(i)->getChar());
+	}
+
+	return output;
+}
+
+void Huffman::print(vector<Node *> treeIn, vector<Node *> orderIn) {
+	vector<Node *> tree = treeIn;
+	vector<pair<char, int>> code;
+
+
 
 }
